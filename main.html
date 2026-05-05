@@ -41,7 +41,7 @@
       --color-bg-card: #1e293b;
       --color-bg-sec: #334155;
       --color-text-main: #f8fafc;
-      --color-text-muted: #cbd5e1; /* MEJORA UX: Aclarado para mayor legibilidad */
+      --color-text-muted: #94a3b8;
       --color-border: #475569;
       --color-border-focus: #cbd5e1;
       --color-chart-grid: #334155;
@@ -144,8 +144,7 @@
     .job-card { background: var(--color-bg-sec); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 18px; box-shadow: var(--shadow-sm); transition: transform 0.2s; }
     .job-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
     
-    /* MEJORA UX: Separación segura del botón eliminar */
-    .job-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+    .job-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
     
     .job-badge { font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px; white-space: nowrap; }
     .b1 { background: #0284c7; color: #ffffff; } 
@@ -157,35 +156,13 @@
     .row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
     .row label { font-size: 14px; color: var(--color-text-muted); min-width: 100px; flex-shrink: 0; font-weight: 500; }
     
-    /* MEJORA UI/UX: Rediseño limpio de prefijos/sufijos y efecto focus */
-    .pfx { 
-      display: flex; align-items: center; background: var(--color-bg-sec); 
-      border: 1px solid var(--color-border); border-radius: var(--radius-md); 
-      overflow: hidden; flex: 1; min-width: 120px; transition: border-color 0.2s, box-shadow 0.2s; width: 100%; 
-    }
-    .pfx:focus-within { 
-      border-color: var(--color-primary); 
-      box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.15); 
-      background: var(--color-bg-card); 
-    }
-    .pfx span { 
-      font-size: 14px; color: var(--color-text-muted); font-weight: 600; 
-      background: transparent; height: 38px; display: flex; align-items: center; opacity: 0.7; 
-      border: none;
-    }
-    .pfx input { 
-      border: none; background: transparent; padding: 0; flex: 1; min-width: 0; 
-      font-size: 15px; color: var(--color-text-main); outline: none; height: 38px; width: 100%; color-scheme: light dark; 
-    }
-    .pfx.has-prefix input { padding-left: 4px; padding-right: 12px; }
-    .pfx.has-prefix span { padding-left: 12px; padding-right: 0; }
-    .pfx.has-suffix input { padding-left: 12px; padding-right: 4px; }
-    .pfx.has-suffix span { padding-left: 0; padding-right: 12px; }
+    .pfx { display: flex; align-items: center; background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--radius-md); overflow: hidden; flex: 1; min-width: 120px; transition: border-color 0.2s; width: 100%; }
+    .pfx:focus-within { border-color: var(--color-primary); }
+    .pfx span { padding: 0 12px; font-size: 14px; color: var(--color-text-muted); border-right: 1px solid var(--color-border); background: var(--color-bg-sec); height: 38px; display: flex; align-items: center; }
+    .pfx input { border: none; background: transparent; padding: 0 12px; flex: 1; min-width: 0; font-size: 15px; color: var(--color-text-main); outline: none; height: 38px; width: 100%; color-scheme: light dark; }
     
-    /* MEJORA UX: Feedback visual al calcular */
     .jsub { font-size: 13px; color: var(--color-text-muted); margin-top: 15px; padding-top: 12px; border-top: 1px dashed var(--color-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 5px; }
-    .jsub strong { color: var(--color-primary); font-weight: 700; font-size: 16px; display: flex; align-items: center; gap: 5px; transition: color 0.3s, transform 0.3s; }
-    .jsub strong.flash { color: var(--color-success); transform: scale(1.05); }
+    .jsub strong { color: var(--color-primary); font-weight: 700; font-size: 16px; display: flex; align-items: center; gap: 5px; }
 
     .globals-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px; }
 
@@ -194,37 +171,14 @@
     .list-row input[type="text"]:focus { border-color: var(--color-primary); }
     .list-row .pfx { flex: 1; }
     
-    /* MEJORA UI: Diseño limpio del botón eliminar */
-    .del-btn { 
-      background: rgba(239, 68, 68, 0.1); border: none; color: var(--color-danger); 
-      width: 32px; height: 32px; border-radius: var(--radius-md); font-size: 16px; 
-      cursor: pointer; display: flex; align-items: center; justify-content: center; 
-      transition: all 0.2s; flex-shrink: 0; margin-left: auto;
-    }
-    .del-btn:hover { background: var(--color-danger); color: white; transform: scale(1.05); }
-    body.dark-theme .del-btn { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
-    body.dark-theme .del-btn:hover { background: var(--color-danger); color: white; }
+    .del-btn { background: #fee2e2; border: none; color: #ef4444; width: 32px; height: 32px; border-radius: var(--radius-md); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; flex-shrink: 0; }
+    .del-btn:hover { background: #fca5a5; color: white; }
+    body.dark-theme .del-btn { background: #7f1d1d; color: #fca5a5; }
+    body.dark-theme .del-btn:hover { background: #991b1b; color: white; }
     
-    /* MEJORA UI: Botón agregar premium y sólido */
-    .add-btn { 
-      font-size: 14px; font-weight: 600; 
-      background: rgba(14, 165, 233, 0.08); 
-      border: 1px solid rgba(14, 165, 233, 0.2); 
-      border-radius: var(--radius-md); padding: 12px 20px; 
-      cursor: pointer; color: var(--color-primary); 
-      margin-top: 10px; width: 100%; transition: all 0.2s ease;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-    }
-    .add-btn:hover { background: rgba(14, 165, 233, 0.15); transform: translateY(-1px); }
+    .add-btn { font-size: 14px; font-weight: 500; background: var(--color-bg-card); border: 1px dashed var(--color-border-focus); border-radius: var(--radius-md); padding: 10px 20px; cursor: pointer; color: var(--color-text-muted); margin-top: 10px; width: 100%; transition: all 0.2s; }
+    .add-btn:hover { background: var(--color-bg-sec); color: var(--color-primary); border-color: var(--color-primary); }
     
-    /* MEJORA UX: Estado Vacío de Trabajos */
-    .empty-state {
-      text-align: center; padding: 30px 20px; color: var(--color-text-muted);
-      background: var(--color-bg-sec); border: 1px dashed var(--color-border);
-      border-radius: var(--radius-lg); font-size: 14px; font-style: italic;
-      display: flex; flex-direction: column; align-items: center; gap: 10px;
-    }
-
     .mgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; margin: 20px 0; }
     .mc { background: var(--color-bg-sec); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 16px; text-align: center; position: relative; overflow: hidden; }
     .mc .ml { font-size: 12px; color: var(--color-text-muted); margin: 0 0 8px; font-weight: 600; text-transform: uppercase; }
@@ -373,28 +327,18 @@
   <div id="jobs-container" class="jobs-grid">
     <!-- Los trabajos se cargarán dinámicamente aquí -->
   </div>
-  <button class="add-btn" onclick="addJob(); saveAndCalc();">
-    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path></svg>
-    Añadir nuevo trabajo
-  </button>
+  <button class="add-btn" onclick="addJob(); saveAndCalc();">+ Añadir nuevo trabajo</button>
 
   <hr class="divider">
 
   <div class="globals-grid">
     <div class="row">
       <label>Ingreso Extra</label>
-      <div class="pfx has-prefix">
-        <span>$</span>
-        <input type="number" id="extra" value="0" min="0" step="1" oninput="saveAndCalc()">
-        <span style="font-size: 12px; opacity: 0.5; padding-right: 12px;">/sem</span>
-      </div>
+      <div class="pfx"><span>$/sem</span><input type="number" id="extra" value="0" min="0" step="1" oninput="saveAndCalc()"></div>
     </div>
     <div class="row">
       <label>Impuestos (Tax)</label>
-      <div class="pfx has-suffix">
-        <input type="number" id="taxRate" value="12" min="0" max="50" step="0.5" oninput="saveAndCalc()">
-        <span>%</span>
-      </div>
+      <div class="pfx"><span>%</span><input type="number" id="taxRate" value="12" min="0" max="50" step="0.5" oninput="saveAndCalc()"></div>
     </div>
   </div>
 
@@ -402,19 +346,13 @@
 
   <p class="slabel">Metas de Ahorro</p>
   <div id="goals-list"></div>
-  <button class="add-btn" onclick="addGoal('', ''); saveAndCalc();">
-    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path></svg>
-    Añadir nueva meta
-  </button>
+  <button class="add-btn" onclick="addGoal('', ''); saveAndCalc();">+ Añadir nueva meta</button>
 
   <hr class="divider">
 
   <p class="slabel">Gastos Variables (Semanales)</p>
   <div id="expenses-list"></div>
-  <button class="add-btn" onclick="addExpense('', ''); saveAndCalc();">
-    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path></svg>
-    Añadir nuevo gasto
-  </button>
+  <button class="add-btn" onclick="addExpense('', ''); saveAndCalc();">+ Añadir nuevo gasto</button>
 
   <hr class="divider">
 
@@ -517,28 +455,8 @@
     }
   }
 
-  // Icono SVG de papelera para reusar
-  const trashIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 256 256"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"></path></svg>`;
-
-  /* ------------- ESTADO VACÍO DE TRABAJOS ------------- */
-  function checkEmptyJobs() {
-    const container = document.getElementById('jobs-container');
-    if (container.children.length === 0) {
-      container.innerHTML = `
-        <div class="empty-state" id="empty-jobs-msg">
-          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 256 256" style="opacity: 0.5;"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM40,56H216V88H40ZM216,200H40V104H216V200Zm-40-64a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h80A8,8,0,0,1,176,136Zm0,32a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h80A8,8,0,0,1,176,168Z"></path></svg>
-          <p style="margin: 0;">No tienes trabajos registrados. ¡Añade uno para comenzar a proyectar tus ahorros!</p>
-        </div>
-      `;
-    }
-  }
-
   /* ------------- LÓGICA DE TRABAJOS ------------- */
   function addJob(name = '', rate = '', hours = '', tips = '') {
-    // Remover mensaje de estado vacío si existe
-    const emptyMsg = document.getElementById('empty-jobs-msg');
-    if(emptyMsg) emptyMsg.remove();
-
     const id = ++jobId;
     const badgeClass = id % 2 === 0 ? 'b2' : 'b1';
     const list = document.getElementById('jobs-container');
@@ -555,19 +473,19 @@
       <div class="job-header">
         <span class="job-badge ${badgeClass}">Job ${id}</span>
         <input class="jname job-name-in" type="text" value="${dName}" oninput="saveAndCalc()">
-        <button class="del-btn" onclick="removeJob(${id})" title="Eliminar Trabajo">${trashIconSVG}</button>
+        <button class="del-btn" style="width: 28px; height: 28px; font-size: 14px; padding: 0; margin-left: auto;" onclick="removeJob(${id})" title="Eliminar Trabajo">✕</button>
       </div>
       <div class="row">
         <label>Tarifa x Hora</label>
-        <div class="pfx has-prefix"><span>$</span><input type="number" class="job-rate-in" value="${dRate}" min="0" step="0.5" oninput="saveAndCalc()"></div>
+        <div class="pfx"><span>$</span><input type="number" class="job-rate-in" value="${dRate}" min="0" step="0.5" oninput="saveAndCalc()"></div>
       </div>
       <div class="row">
         <label>Horas / Sem</label>
-        <div class="pfx has-suffix"><input type="number" class="job-hours-in" value="${dHours}" min="0" max="168" step="0.5" oninput="saveAndCalc()"><span>hrs</span></div>
+        <div class="pfx"><span>h</span><input type="number" class="job-hours-in" value="${dHours}" min="0" max="168" step="0.5" oninput="saveAndCalc()"></div>
       </div>
       <div class="row">
         <label>Propinas / Sem</label>
-        <div class="pfx has-prefix"><span>$</span><input type="number" class="job-tips-in" value="${dTips}" min="0" step="1" oninput="saveAndCalc()"></div>
+        <div class="pfx"><span>$</span><input type="number" class="job-tips-in" value="${dTips}" min="0" step="1" oninput="saveAndCalc()"></div>
       </div>
       <div class="jsub">
         <span>Subtotal Semanal</span>
@@ -581,7 +499,6 @@
   function removeJob(id) {
     const el = document.getElementById('job-' + id);
     if (el) el.remove();
-    checkEmptyJobs();
     saveAndCalc();
   }
 
@@ -606,16 +523,17 @@
     row.className = 'list-row goal-row';
     row.id = 'goal-' + id;
     
+    // Valores por defecto
     const dName = name || `Meta ${id}`;
     const dAmount = amount !== '' ? amount : 5000;
 
     row.innerHTML = `
       <input type="text" class="goal-name-in" placeholder="Nombre (ej. Auto)" value="${dName}" oninput="saveAndCalc()">
-      <div class="pfx has-prefix">
+      <div class="pfx">
         <span>$</span>
         <input type="number" class="goal-amt-in" value="${dAmount}" min="1" step="100" placeholder="0" oninput="saveAndCalc()">
       </div>
-      <button class="del-btn" onclick="removeGoal(${id})" title="Eliminar">${trashIconSVG}</button>
+      <button class="del-btn" onclick="removeGoal(${id})" title="Eliminar">✕</button>
     `;
     list.appendChild(row);
   }
@@ -645,11 +563,11 @@
     row.id = 'exp-' + id;
     row.innerHTML = `
       <input type="text" class="exp-name" placeholder="Descripción (ej. Renta)" value="${name}" oninput="saveAndCalc()">
-      <div class="pfx has-prefix">
+      <div class="pfx">
         <span>$</span>
         <input type="number" class="exp-amt" value="${amount}" min="0" step="1" placeholder="0" oninput="saveAndCalc()">
       </div>
-      <button class="del-btn" onclick="removeExp(${id})" title="Eliminar">${trashIconSVG}</button>
+      <button class="del-btn" onclick="removeExp(${id})" title="Eliminar">✕</button>
     `;
     list.appendChild(row);
   }
@@ -735,11 +653,9 @@
       document.getElementById('jobs-container').innerHTML = '';
       if (d.jobs && d.jobs.length > 0) {
         d.jobs.forEach(j => addJob(j.name, j.rate, j.hours, j.tips));
-      } else if (d.n1 !== undefined || d.n2 !== undefined) {
-        if(d.n1 !== undefined) addJob(d.n1, d.r1, d.h1, 0); 
-        if(d.n2 !== undefined) addJob(d.n2, d.r2, d.h2, 0); 
       } else {
-        checkEmptyJobs();
+        if(d.n1 !== undefined) addJob(d.n1, d.r1, d.h1, 0); else addJob('Main job', 25, 40, 0);
+        if(d.n2 !== undefined) addJob(d.n2, d.r2, d.h2, 0); else addJob('Side job', 18, 15, 0);
       }
 
       // Metas
@@ -747,6 +663,7 @@
       if (d.goals && d.goals.length > 0) {
         d.goals.forEach(g => addGoal(g.name, g.amount));
       } else if (d.sg !== undefined) {
+        // Migración de la antigua meta única
         addGoal('Mi Meta', d.sg);
       } else {
         addGoal('Universidad', 5000);
@@ -776,7 +693,7 @@
     } else {
       setInitialDates();
       addJob('Main job', 25, 40, 0);
-      addJob('Side job', 18, 15, 150);
+      addJob('Side job', 18, 15, 150); // Ejemplo de trabajo con propinas
       addGoal('Universidad', 5000);
       addGoal('Viaje', 1500);
       addDefaultExpenses();
@@ -806,17 +723,9 @@
       
       const subEl = document.getElementById(`sub-job-${j.id}`);
       if(subEl) {
+        // Indicador visual de si hay overtime
         let extraText = overtimeHours > 0 ? ` <span style="font-size:11px; color:var(--color-warning); font-weight:normal;">(+OT)</span>` : '';
-        let newHtml = fmt(sub) + extraText;
-        
-        // Animación visual solo si el valor cambió (mejora de UX)
-        if (subEl.innerHTML !== newHtml) {
-          subEl.innerHTML = newHtml;
-          subEl.classList.remove('flash');
-          void subEl.offsetWidth; // Dispara reflow
-          subEl.classList.add('flash');
-          setTimeout(() => subEl.classList.remove('flash'), 300);
-        }
+        subEl.innerHTML = fmt(sub) + extraText;
       }
     });
 
@@ -860,7 +769,7 @@
 
     /* ----------- RENDERIZADO DE METAS DE AHORRO MÚLTIPLES ----------- */
     const goalsContainer = document.getElementById('goals-progress-list');
-    goalsContainer.innerHTML = ''; 
+    goalsContainer.innerHTML = ''; // Limpiar contenedor
 
     if (d.goals && d.goals.length > 0) {
       d.goals.forEach((g) => {
@@ -868,6 +777,7 @@
         let progressPct = (finalNet / goalAmount) * 100;
         if (progressPct < 0) progressPct = 0;
 
+        // Calcular semanas necesarias
         let weekText = "";
         if (wNet > 0) {
           const weeksNeeded = Math.ceil(goalAmount / wNet);
@@ -886,6 +796,7 @@
         const displayPct = progressPct > 100 ? 100 : progressPct.toFixed(1);
         const finalPctText = isReached ? '¡Logrado! ✨' : `${displayPct}%`;
 
+        // Generar HTML para cada meta
         const goalHtml = `
           <div class="goal-item">
             <div class="goal-labels">
