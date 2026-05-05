@@ -1,0 +1,296 @@
+
+<style>
+  .slabel { font-size: 12px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 10px; }
+  .job-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 14px 16px; margin-bottom: 10px; }
+  .job-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .job-badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; }
+  .b1 { background: #E6F1FB; color: #185FA5; }
+  .b2 { background: #E1F5EE; color: #0F6E56; }
+  .jname { flex: 1; font-size: 13px; font-weight: 500; background: transparent; border: none; border-bottom: 0.5px solid var(--color-border-tertiary); padding: 2px 4px; color: var(--color-text-primary); outline: none; }
+  .jname:focus { border-bottom-color: var(--color-border-primary); }
+  .row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .row:last-child { margin-bottom: 0; }
+  .row label { font-size: 13px; color: var(--color-text-secondary); min-width: 90px; }
+  .pfx { display: flex; align-items: center; background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); overflow: hidden; flex: 1; }
+  .pfx span { padding: 0 8px; font-size: 13px; color: var(--color-text-secondary); border-right: 0.5px solid var(--color-border-tertiary); height: 36px; display: flex; align-items: center; white-space: nowrap; }
+  .pfx input { border: none; background: transparent; padding: 0 10px; flex: 1; font-size: 14px; color: var(--color-text-primary); outline: none; height: 36px; min-width: 0; }
+  .jsub { font-size: 12px; color: var(--color-text-secondary); margin-top: 10px; padding-top: 8px; border-top: 0.5px solid var(--color-border-tertiary); display: flex; justify-content: space-between; }
+  .jsub strong { color: var(--color-text-primary); font-weight: 500; }
+  .exp-row { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
+  .exp-row input[type="text"] { flex: 1.8; min-width: 0; font-size: 13px; }
+  .exp-row .pfx { flex: 1; min-width: 0; }
+  .exp-row .pfx input { font-size: 13px; }
+  .del-btn { background: none; border: none; color: var(--color-text-secondary); font-size: 15px; cursor: pointer; padding: 0 4px; line-height: 1; border-radius: 4px; }
+  .del-btn:hover { color: var(--color-text-primary); background: var(--color-background-secondary); }
+  .add-btn { font-size: 13px; background: none; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 6px 14px; cursor: pointer; color: var(--color-text-secondary); margin-top: 4px; }
+  .add-btn:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
+  .mgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin: 1.2rem 0; }
+  .mc { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px 14px; }
+  .mc .ml { font-size: 11px; color: var(--color-text-secondary); margin: 0 0 4px; }
+  .mc .mv { font-size: 20px; font-weight: 500; margin: 0; color: var(--color-text-primary); }
+  .mc.big { background: var(--color-background-secondary); }
+  .mc.big .mv { font-size: 26px; }
+  .pos { color: #1D9E75; }
+  .neg { color: #E24B4A; }
+  .divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1.2rem 0; }
+  .col-hdr { display: flex; gap: 8px; margin-bottom: 4px; }
+  .col-hdr span { font-size: 11px; color: var(--color-text-secondary); }
+  .chart-wrap { position: relative; width: 100%; height: 240px; margin-top: 0.5rem; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 8px; }
+  .li { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--color-text-secondary); }
+  .ls { width: 10px; height: 10px; border-radius: 2px; }
+  .slider-row { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
+  .slider-row label { font-size: 13px; color: var(--color-text-secondary); white-space: nowrap; }
+  .slider-row input[type=range] { flex: 1; }
+  .slider-val { font-size: 14px; font-weight: 500; min-width: 60px; color: var(--color-text-primary); }
+  .proj-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 1rem; }
+</style>
+
+<h2 class="sr-only">Weekly and monthly earnings tracker for two jobs with variable expenses, monthly net calculation, and cumulative net projection over a chosen number of months.</h2>
+
+<div style="padding: 1rem 0;">
+
+  <p class="slabel">Jobs</p>
+
+  <div class="job-card">
+    <div class="job-header">
+      <span class="job-badge b1">Job 1</span>
+      <input class="jname" id="job1-name" type="text" value="Main job" oninput="calc()">
+    </div>
+    <div class="row"><label>Hourly rate</label><div class="pfx"><span>$</span><input type="number" id="rate1" value="25" min="0" step="0.5" oninput="calc()"></div></div>
+    <div class="row"><label>Hours / week</label><div class="pfx"><span>h</span><input type="number" id="hours1" value="40" min="0" max="168" step="0.5" oninput="calc()"></div></div>
+    <div class="jsub"><span>Weekly subtotal</span><strong id="sub1">$0.00</strong></div>
+  </div>
+
+  <div class="job-card">
+    <div class="job-header">
+      <span class="job-badge b2">Job 2</span>
+      <input class="jname" id="job2-name" type="text" value="Side job" oninput="calc()">
+    </div>
+    <div class="row"><label>Hourly rate</label><div class="pfx"><span>$</span><input type="number" id="rate2" value="18" min="0" step="0.5" oninput="calc()"></div></div>
+    <div class="row"><label>Hours / week</label><div class="pfx"><span>h</span><input type="number" id="hours2" value="15" min="0" max="168" step="0.5" oninput="calc()"></div></div>
+    <div class="jsub"><span>Weekly subtotal</span><strong id="sub2">$0.00</strong></div>
+  </div>
+
+  <div class="row" style="margin-top:10px;">
+    <label style="min-width:90px;font-size:13px;color:var(--color-text-secondary);">Extra income</label>
+    <div class="pfx"><span>$ / wk</span><input type="number" id="extra" value="0" min="0" step="1" placeholder="0" oninput="calc()"></div>
+  </div>
+
+  <hr class="divider">
+
+  <p class="slabel">Variable expenses</p>
+  <div class="col-hdr">
+    <span style="flex:1.8">Description</span>
+    <span style="flex:1">Amount ($/wk)</span>
+    <span style="width:28px"></span>
+  </div>
+  <div id="expenses-list"></div>
+  <button class="add-btn" onclick="addExpense()">+ add expense</button>
+
+  <hr class="divider">
+
+  <p class="slabel">Weekly summary</p>
+  <div class="mgrid">
+    <div class="mc"><p class="ml" id="lbl1">Job 1</p><p class="mv" id="m-j1" style="color:#185FA5;">$0</p></div>
+    <div class="mc"><p class="ml" id="lbl2">Job 2</p><p class="mv" id="m-j2" style="color:#0F6E56;">$0</p></div>
+    <div class="mc"><p class="ml">Extra</p><p class="mv" id="m-ext" style="color:#534AB7;">$0</p></div>
+    <div class="mc"><p class="ml">Gross / week</p><p class="mv" id="m-gross">$0</p></div>
+    <div class="mc"><p class="ml">Expenses / week</p><p class="mv" id="m-exp" style="color:#E24B4A;">$0</p></div>
+    <div class="mc big"><p class="ml">Net / week</p><p class="mv" id="m-wnet">$0</p></div>
+  </div>
+
+  <hr class="divider">
+
+  <p class="slabel">Monthly view <span style="font-weight:400;font-size:11px;letter-spacing:0;text-transform:none;">(× 4.33 weeks)</span></p>
+  <div class="mgrid">
+    <div class="mc"><p class="ml">Gross / month</p><p class="mv" id="m-mgross">$0</p></div>
+    <div class="mc"><p class="ml">Expenses / month</p><p class="mv" id="m-mexp" style="color:#E24B4A;">$0</p></div>
+    <div class="mc big" style="grid-column:span 2"><p class="ml">Net / month</p><p class="mv" id="m-mnet" style="font-size:28px;">$0</p></div>
+  </div>
+
+  <hr class="divider">
+
+  <p class="slabel">Cumulative projection</p>
+
+  <div class="slider-row">
+    <label>Projection period</label>
+    <input type="range" id="months-slider" min="1" max="36" value="12" step="1" oninput="updateSlider()">
+    <span class="slider-val"><span id="months-val">12</span> mo</span>
+  </div>
+
+  <div class="proj-summary">
+    <div class="mc"><p class="ml">Total earned</p><p class="mv" id="p-earned">$0</p></div>
+    <div class="mc"><p class="ml">Total spent</p><p class="mv" id="p-spent" style="color:#E24B4A;">$0</p></div>
+    <div class="mc big"><p class="ml">Final net</p><p class="mv" id="p-final">$0</p></div>
+  </div>
+
+  <div class="legend" id="proj-legend"></div>
+  <div class="chart-wrap">
+    <canvas id="projChart" role="img" aria-label="Line chart showing cumulative gross income, cumulative expenses, and cumulative net income over selected months.">Cumulative projection over selected months.</canvas>
+  </div>
+
+  <hr class="divider">
+
+  <p class="slabel">Weekly breakdown</p>
+  <div class="legend" id="week-legend"></div>
+  <div class="chart-wrap" style="height:200px;">
+    <canvas id="weekChart" role="img" aria-label="Stacked bar chart comparing weekly gross income versus expenses and net income.">Weekly income vs expenses breakdown.</canvas>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+  let projChart, weekChart;
+  let expId = 0;
+  const WEEKS_PER_MONTH = 4.33;
+
+  function fmt(n) {
+    const abs = Math.abs(n);
+    const s = '$' + abs.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return n < 0 ? '-' + s : s;
+  }
+
+  function addExpense(name = '', amount = '') {
+    const id = ++expId;
+    const list = document.getElementById('expenses-list');
+    const row = document.createElement('div');
+    row.className = 'exp-row';
+    row.id = 'exp-' + id;
+    row.innerHTML = `<input type="text" placeholder="Description" value="${name}" oninput="calc()"><div class="pfx"><span>$</span><input type="number" value="${amount}" min="0" step="1" placeholder="0" oninput="calc()"></div><button class="del-btn" onclick="removeExp(${id})">✕</button>`;
+    list.appendChild(row);
+    calc();
+  }
+
+  function removeExp(id) {
+    const el = document.getElementById('exp-' + id);
+    if (el) el.remove();
+    calc();
+  }
+
+  function getExpTotal() {
+    let t = 0;
+    document.querySelectorAll('.exp-row').forEach(r => {
+      t += parseFloat(r.querySelector('input[type="number"]').value) || 0;
+    });
+    return t;
+  }
+
+  function updateSlider() {
+    const v = document.getElementById('months-slider').value;
+    document.getElementById('months-val').textContent = v;
+    calc();
+  }
+
+  function setClass(el, val) {
+    el.className = 'mv ' + (val >= 0 ? 'pos' : 'neg');
+  }
+
+  function calc() {
+    const r1 = parseFloat(document.getElementById('rate1').value) || 0;
+    const h1 = parseFloat(document.getElementById('hours1').value) || 0;
+    const r2 = parseFloat(document.getElementById('rate2').value) || 0;
+    const h2 = parseFloat(document.getElementById('hours2').value) || 0;
+    const extra = parseFloat(document.getElementById('extra').value) || 0;
+    const j1 = r1 * h1, j2 = r2 * h2;
+    const wGross = j1 + j2 + extra;
+    const wExp = getExpTotal();
+    const wNet = wGross - wExp;
+    const mGross = wGross * WEEKS_PER_MONTH;
+    const mExp = wExp * WEEKS_PER_MONTH;
+    const mNet = wNet * WEEKS_PER_MONTH;
+    const months = parseInt(document.getElementById('months-slider').value);
+    const n1 = document.getElementById('job1-name').value || 'Job 1';
+    const n2 = document.getElementById('job2-name').value || 'Job 2';
+
+    document.getElementById('sub1').textContent = fmt(j1);
+    document.getElementById('sub2').textContent = fmt(j2);
+    document.getElementById('lbl1').textContent = n1;
+    document.getElementById('lbl2').textContent = n2;
+    document.getElementById('m-j1').textContent = fmt(j1);
+    document.getElementById('m-j2').textContent = fmt(j2);
+    document.getElementById('m-ext').textContent = fmt(extra);
+    document.getElementById('m-gross').textContent = fmt(wGross);
+    document.getElementById('m-exp').textContent = fmt(wExp);
+
+    const wnetEl = document.getElementById('m-wnet');
+    wnetEl.textContent = fmt(wNet); setClass(wnetEl, wNet);
+
+    document.getElementById('m-mgross').textContent = fmt(mGross);
+    document.getElementById('m-mexp').textContent = fmt(mExp);
+    const mnetEl = document.getElementById('m-mnet');
+    mnetEl.textContent = fmt(mNet); setClass(mnetEl, mNet);
+
+    const totalEarned = mGross * months;
+    const totalSpent = mExp * months;
+    const finalNet = mNet * months;
+    document.getElementById('p-earned').textContent = fmt(totalEarned);
+    document.getElementById('p-spent').textContent = fmt(totalSpent);
+    const pfEl = document.getElementById('p-final');
+    pfEl.textContent = fmt(finalNet); setClass(pfEl, finalNet);
+    pfEl.style.fontSize = finalNet < -999999 || finalNet > 999999 ? '18px' : '26px';
+
+    const labels = Array.from({ length: months }, (_, i) => 'Mo ' + (i + 1));
+    const cumGross = labels.map((_, i) => parseFloat((mGross * (i + 1)).toFixed(2)));
+    const cumExp   = labels.map((_, i) => parseFloat((mExp   * (i + 1)).toFixed(2)));
+    const cumNet   = labels.map((_, i) => parseFloat((mNet   * (i + 1)).toFixed(2)));
+
+    if (projChart) projChart.destroy();
+    projChart = new Chart(document.getElementById('projChart'), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          { label: 'Gross income', data: cumGross, borderColor: '#185FA5', backgroundColor: 'rgba(24,95,165,0.08)', borderWidth: 2, pointRadius: months > 18 ? 0 : 3, fill: false, tension: 0.2 },
+          { label: 'Expenses', data: cumExp, borderColor: '#E24B4A', backgroundColor: 'rgba(226,75,74,0.06)', borderWidth: 2, pointRadius: months > 18 ? 0 : 3, fill: false, tension: 0.2, borderDash: [5, 3] },
+          { label: 'Net', data: cumNet, borderColor: '#1D9E75', backgroundColor: 'rgba(29,158,117,0.08)', borderWidth: 2.5, pointRadius: months > 18 ? 0 : 3, fill: true, tension: 0.2 },
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + c.dataset.label + ': ' + fmt(c.parsed.y) } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: '#888', font: { size: 11 }, maxTicksLimit: 12, autoSkip: true } },
+          y: { grid: { color: 'rgba(130,130,130,0.12)' }, ticks: { color: '#888', font: { size: 11 }, callback: v => '$' + (Math.abs(v) >= 1000 ? (v/1000).toFixed(0) + 'k' : v) } }
+        }
+      }
+    });
+
+    document.getElementById('proj-legend').innerHTML = [
+      { c: '#185FA5', l: 'Cumulative gross' },
+      { c: '#E24B4A', l: 'Cumulative expenses' },
+      { c: '#1D9E75', l: 'Cumulative net' },
+    ].map(x => `<span class="li"><span class="ls" style="background:${x.c}"></span>${x.l}</span>`).join('');
+
+    if (weekChart) weekChart.destroy();
+    weekChart = new Chart(document.getElementById('weekChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Gross income', 'Expenses', wNet >= 0 ? 'Net income' : 'Deficit'],
+        datasets: [
+          { label: n1, data: [j1, 0, 0], backgroundColor: 'rgba(24,95,165,0.75)', borderColor: '#185FA5', borderWidth: 1.5, borderRadius: 4 },
+          { label: n2, data: [j2, 0, 0], backgroundColor: 'rgba(15,110,86,0.75)', borderColor: '#0F6E56', borderWidth: 1.5, borderRadius: 4 },
+          { label: 'Extra', data: [extra, 0, 0], backgroundColor: 'rgba(83,74,183,0.7)', borderColor: '#534AB7', borderWidth: 1.5, borderRadius: 4 },
+          { label: 'Expenses', data: [0, wExp, 0], backgroundColor: 'rgba(226,75,74,0.7)', borderColor: '#E24B4A', borderWidth: 1.5, borderRadius: 4 },
+          { label: wNet >= 0 ? 'Net' : 'Deficit', data: [0, 0, Math.abs(wNet)], backgroundColor: wNet >= 0 ? 'rgba(29,158,117,0.75)' : 'rgba(226,75,74,0.4)', borderColor: wNet >= 0 ? '#1D9E75' : '#E24B4A', borderWidth: 1.5, borderRadius: 4 },
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + c.dataset.label + ': ' + fmt(c.parsed.y) } } },
+        scales: {
+          x: { stacked: true, grid: { display: false }, ticks: { color: '#888', font: { size: 12 } } },
+          y: { stacked: true, grid: { color: 'rgba(130,130,130,0.12)' }, ticks: { color: '#888', font: { size: 11 }, callback: v => '$' + v.toLocaleString() } }
+        }
+      }
+    });
+
+    document.getElementById('week-legend').innerHTML = [
+      { c: '#185FA5', l: n1 }, { c: '#0F6E56', l: n2 }, { c: '#534AB7', l: 'Extra' },
+      { c: '#E24B4A', l: 'Expenses' }, { c: wNet >= 0 ? '#1D9E75' : '#E24B4A', l: wNet >= 0 ? 'Net' : 'Deficit' }
+    ].map(x => `<span class="li"><span class="ls" style="background:${x.c}"></span>${x.l}</span>`).join('');
+  }
+
+  [['Rent / mortgage', 400], ['Groceries', 120], ['Transport', 60], ['Utilities', 50]].forEach(([n, a]) => addExpense(n, a));
+</script>
