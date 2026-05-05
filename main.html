@@ -307,14 +307,14 @@
     }
   </style>
 </head>
-<body>
+<body class="dark-theme">
 
 <div class="container">
   <div class="header-actions">
     <h2>Summer Work Tracker</h2>
     <div class="header-buttons">
       <button class="btn-theme btn-export" onclick="window.print()" title="Guardar como PDF">🖨️ Exportar</button>
-      <button id="theme-btn" class="btn-theme" onclick="toggleTheme()" title="Cambiar Tema">🌙</button>
+      <button id="theme-btn" class="btn-theme" onclick="toggleTheme()" title="Cambiar Tema">☀️</button>
       <button class="btn-clear" onclick="clearData()">Limpiar</button>
     </div>
   </div>
@@ -436,10 +436,13 @@
   function loadTheme() {
     const savedTheme = localStorage.getItem('summerWorkTheme');
     const themeBtn = document.getElementById('theme-btn');
-    if (savedTheme === 'dark') {
+    
+    // Si no hay tema guardado (null) o es 'dark', aplicamos el tema oscuro por defecto
+    if (savedTheme === 'dark' || savedTheme === null) {
       document.body.classList.add('dark-theme');
       themeBtn.textContent = '☀️';
     } else {
+      document.body.classList.remove('dark-theme');
       themeBtn.textContent = '🌙';
     }
   }
