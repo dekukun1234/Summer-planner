@@ -150,7 +150,6 @@
     .b1 { background: #0284c7; color: #ffffff; } 
     .b2 { background: #059669; color: #ffffff; }
     
-    /* Añadimos min-width: 0 para asegurar que el input se pueda encoger en flexbox */
     .jname { flex: 1; min-width: 0; font-size: 15px; font-weight: 600; background: transparent; border: none; border-bottom: 1px solid var(--color-border); padding: 4px; color: var(--color-text-main); outline: none; transition: border-color 0.2s; width: 100%; }
     .jname:focus { border-bottom-color: var(--color-primary); }
     
@@ -167,10 +166,10 @@
 
     .globals-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px; }
 
-    .exp-row { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
-    .exp-row input[type="text"] { flex: 2; min-width: 150px; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: 14px; outline: none; background: var(--color-bg-card); color: var(--color-text-main); transition: border-color 0.2s; width: 100%; }
-    .exp-row input[type="text"]:focus { border-color: var(--color-primary); }
-    .exp-row .pfx { flex: 1; }
+    .list-row { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
+    .list-row input[type="text"] { flex: 2; min-width: 150px; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: 14px; outline: none; background: var(--color-bg-card); color: var(--color-text-main); transition: border-color 0.2s; width: 100%; }
+    .list-row input[type="text"]:focus { border-color: var(--color-primary); }
+    .list-row .pfx { flex: 1; }
     
     .del-btn { background: #fee2e2; border: none; color: #ef4444; width: 32px; height: 32px; border-radius: var(--radius-md); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; flex-shrink: 0; }
     .del-btn:hover { background: #fca5a5; color: white; }
@@ -202,14 +201,14 @@
       grid-template-columns: 2fr 1fr; 
       gap: 20px; 
       align-items: start; 
-      max-width: 100%; /* Previene desbordamiento en móviles */
+      max-width: 100%;
     }
     
     .chart-wrap { 
       position: relative; 
       width: 100%; 
       max-width: 100%; 
-      min-width: 0; /* CRUCIAL: Permite que el canvas se reduzca dentro del grid */
+      min-width: 0; 
       height: 280px; 
       margin-top: 15px; 
     }
@@ -224,10 +223,18 @@
     .date-inputs span { color: var(--color-text-muted); font-size: 14px; font-weight: 500; }
     body.dark-theme .date-inputs input[type="date"] { color-scheme: dark; }
 
-    .goal-progress-container { margin-top: 12px; width: 100%; }
-    .goal-labels { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; color: var(--color-text-muted); font-weight: 600; }
+    /* Estilos Metas Múltiples */
+    .goal-progress-container { margin-top: 15px; width: 100%; text-align: left; }
+    .goal-item { margin-bottom: 12px; background: rgba(0,0,0,0.1); padding: 10px; border-radius: var(--radius-md); }
+    body.light-theme .goal-item { background: rgba(255,255,255,0.2); }
+    .goal-labels { display: flex; justify-content: space-between; align-items: flex-end; font-size: 13px; margin-bottom: 6px; font-weight: 600; }
+    .goal-name { color: #ffffff; }
+    .goal-info { text-align: right; }
+    .goal-pct { font-size: 14px; color: #ffffff; display: block; }
+    .goal-week { font-size: 11px; color: rgba(255,255,255,0.8); font-weight: 500; display: block; margin-top: 2px;}
+    
     .goal-track { height: 8px; background: var(--color-bg-card); border-radius: 4px; overflow: hidden; box-shadow: inset 0 1px 2px rgba(0,0,0,0.1); }
-    .goal-fill { height: 100%; background: var(--color-success); border-radius: 4px; transition: width 0.5s ease, background-color 0.3s ease; }
+    .goal-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease, background-color 0.3s ease; }
     body.dark-theme .goal-track { background: var(--color-bg-body); }
 
     .footer-credits { text-align: center; margin-top: 40px; font-size: 13px; color: var(--color-text-muted); }
@@ -245,6 +252,8 @@
       input[type="number"], input[type="date"], input[type="text"] { border: none !important; background: transparent !important; }
       .charts-container { display: block; }
       .chart-wrap { height: 250px; margin-bottom: 30px; page-break-inside: avoid; }
+      .goal-item { background: transparent; border: 1px solid #ccc; }
+      .goal-name, .goal-pct, .goal-week { color: black !important; }
     }
 
     /* Media Queries para Responsividad Total (Tablets y Móviles) */
@@ -257,7 +266,6 @@
       body { padding: 10px; }
       .container { padding: 15px; border-radius: var(--radius-md); overflow-x: hidden; }
 
-      /* Encabezado */
       .header-actions { flex-direction: column; align-items: flex-start; gap: 15px; margin-bottom: 25px; }
       .header-actions h2 { font-size: 22px; text-align: center; width: 100%; }
       .header-buttons { width: 100%; justify-content: center; gap: 8px; }
@@ -265,15 +273,13 @@
 
       .jobs-grid { grid-template-columns: 1fr; }
       
-      /* Inputs y Filas dentro de tarjetas */
       .row { flex-direction: column; align-items: stretch; gap: 5px; }
       .row label { margin-bottom: 2px; font-size: 13px; min-width: auto; }
       .pfx { min-width: 100%; }
 
-      /* Gastos y Controles Globales */
       .globals-grid { grid-template-columns: 1fr; gap: 15px; }
 
-      .exp-row { 
+      .list-row { 
         flex-direction: column; 
         align-items: stretch; 
         background: var(--color-bg-sec);
@@ -281,17 +287,15 @@
         border: 1px solid var(--color-border);
         border-radius: var(--radius-md);
       }
-      .exp-row input[type="text"], .exp-row .pfx { width: 100%; min-width: 100%; box-sizing: border-box; }
-      .exp-row input[type="text"] { background: var(--color-bg-card); }
+      .list-row input[type="text"], .list-row .pfx { width: 100%; min-width: 100%; box-sizing: border-box; }
+      .list-row input[type="text"] { background: var(--color-bg-card); }
       .del-btn { width: 100%; margin-top: 8px; }
       
-      /* Fechas del Summer */
       .slider-row { flex-direction: column; align-items: stretch; gap: 12px; }
       .date-inputs { flex-direction: column; align-items: stretch; gap: 8px; min-width: 100%; }
       .date-inputs span { text-align: center; }
       .slider-val { align-self: center; margin-left: 0; width: 100%; text-align: center; }
 
-      /* Ajustes de las tarjetas de resumen (Métricas) */
       .mgrid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
       .col-span-2 { grid-column: span 2; }
       .mc { padding: 12px; }
@@ -299,7 +303,6 @@
       .mc .mv { font-size: 18px; }
       .mc.big .mv { font-size: 22px; }
       
-      /* En pantallas miniatura (ej. iPhone SE) */
       @media (max-width: 380px) {
         .mgrid { grid-template-columns: 1fr; }
         .col-span-2 { grid-column: span 1; }
@@ -337,11 +340,13 @@
       <label>Impuestos (Tax)</label>
       <div class="pfx"><span>%</span><input type="number" id="taxRate" value="12" min="0" max="50" step="0.5" oninput="saveAndCalc()"></div>
     </div>
-    <div class="row">
-      <label>Meta de Ahorro</label>
-      <div class="pfx"><span>$</span><input type="number" id="savingsGoal" value="5000" min="1" step="100" oninput="saveAndCalc()"></div>
-    </div>
   </div>
+
+  <hr class="divider">
+
+  <p class="slabel">Metas de Ahorro</p>
+  <div id="goals-list"></div>
+  <button class="add-btn" onclick="addGoal('', ''); saveAndCalc();">+ Añadir nueva meta</button>
 
   <hr class="divider">
 
@@ -389,15 +394,12 @@
     <div class="mc big col-span-2">
       <p class="ml">Ahorro Final</p>
       <p class="mv" id="p-final">$0</p>
-      <div class="goal-progress-container">
-        <div class="goal-labels">
-          <span style="color: rgba(255,255,255,0.8);">Meta</span>
-          <span id="goal-pct" style="color: #ffffff;">0%</span>
-        </div>
-        <div class="goal-track">
-          <div class="goal-fill" id="goal-bar" style="width: 0%;"></div>
-        </div>
+      
+      <!-- Contenedor dinámico para múltiples metas -->
+      <div id="goals-progress-list" class="goal-progress-container">
+        <!-- Las barras de metas se insertan aquí vía JS -->
       </div>
+      
     </div>
   </div>
 
@@ -422,7 +424,14 @@
   let distChart;
   let expId = 0;
   let jobId = 0;
+  let goalId = 0;
   const WEEKS_PER_MONTH = 4.33;
+
+  function fmt(n) {
+    const abs = Math.abs(n);
+    const s = '$' + abs.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return n < 0 ? '-' + s : s;
+  }
 
   // Lógica del Tema Oscuro / Claro
   function toggleTheme() {
@@ -437,7 +446,6 @@
     const savedTheme = localStorage.getItem('summerWorkTheme');
     const themeBtn = document.getElementById('theme-btn');
     
-    // Si no hay tema guardado (null) o es 'dark', aplicamos el tema oscuro por defecto
     if (savedTheme === 'dark' || savedTheme === null) {
       document.body.classList.add('dark-theme');
       themeBtn.textContent = '☀️';
@@ -447,13 +455,7 @@
     }
   }
 
-  function fmt(n) {
-    const abs = Math.abs(n);
-    const s = '$' + abs.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    return n < 0 ? '-' + s : s;
-  }
-
-  /* ------------- LÓGICA DE TRABAJOS DINÁMICOS ------------- */
+  /* ------------- LÓGICA DE TRABAJOS ------------- */
   function addJob(name = '', rate = '', hours = '') {
     const id = ++jobId;
     const badgeClass = id % 2 === 0 ? 'b2' : 'b1';
@@ -462,7 +464,6 @@
     div.className = 'job-card';
     div.id = 'job-' + id;
     
-    // Valores por defecto visuales si vienen vacíos
     const dName = name || `Job ${id}`;
     const dRate = rate !== '' ? rate : (id === 1 ? 25 : 18);
     const dHours = hours !== '' ? hours : (id === 1 ? 40 : 15);
@@ -505,12 +506,51 @@
     return jobs;
   }
 
+  /* ------------- LÓGICA DE METAS DE AHORRO ------------- */
+  function addGoal(name = '', amount = '') {
+    const id = ++goalId;
+    const list = document.getElementById('goals-list');
+    const row = document.createElement('div');
+    row.className = 'list-row goal-row';
+    row.id = 'goal-' + id;
+    
+    // Valores por defecto
+    const dName = name || `Meta ${id}`;
+    const dAmount = amount !== '' ? amount : 5000;
+
+    row.innerHTML = `
+      <input type="text" class="goal-name-in" placeholder="Nombre (ej. Auto)" value="${dName}" oninput="saveAndCalc()">
+      <div class="pfx">
+        <span>$</span>
+        <input type="number" class="goal-amt-in" value="${dAmount}" min="1" step="100" placeholder="0" oninput="saveAndCalc()">
+      </div>
+      <button class="del-btn" onclick="removeGoal(${id})" title="Eliminar">✕</button>
+    `;
+    list.appendChild(row);
+  }
+
+  function removeGoal(id) {
+    const el = document.getElementById('goal-' + id);
+    if (el) el.remove();
+    saveAndCalc();
+  }
+
+  function getGoalsData() {
+    let goals = [];
+    document.querySelectorAll('.goal-row').forEach(r => {
+      let n = r.querySelector('.goal-name-in').value;
+      let a = r.querySelector('.goal-amt-in').value;
+      if (n || a) goals.push({ name: n, amount: a });
+    });
+    return goals;
+  }
+
   /* ------------- LÓGICA DE GASTOS ------------- */
   function addExpense(name = '', amount = '') {
     const id = ++expId;
     const list = document.getElementById('expenses-list');
     const row = document.createElement('div');
-    row.className = 'exp-row';
+    row.className = 'list-row exp-row';
     row.id = 'exp-' + id;
     row.innerHTML = `
       <input type="text" class="exp-name" placeholder="Descripción (ej. Renta)" value="${name}" oninput="saveAndCalc()">
@@ -542,7 +582,7 @@
   function setClass(el, val) { el.classList.remove('pos', 'neg'); if (val !== 0) el.classList.add(val > 0 ? 'pos' : 'neg'); }
 
   function clearData() {
-    if(confirm("¿Estás seguro de que quieres limpiar todos los datos?")) {
+    if(confirm("¿Estás seguro de que quieres limpiar todos los datos locales?")) {
       localStorage.removeItem('summerWorkData');
       location.reload();
     }
@@ -582,9 +622,9 @@
 
     const data = {
       jobs: getJobsData(),
+      goals: getGoalsData(),
       ex: document.getElementById('extra').value,
       tx: document.getElementById('taxRate').value,
-      sg: document.getElementById('savingsGoal').value,
       startD: sDateStr,
       endD: eDateStr,
       wk: weeks,
@@ -600,23 +640,31 @@
     if (saved) {
       const d = JSON.parse(saved);
       
-      // Retrocompatibilidad con la versión anterior (n1, r1, h1...)
+      // Trabajos
       document.getElementById('jobs-container').innerHTML = '';
       if (d.jobs && d.jobs.length > 0) {
         d.jobs.forEach(j => addJob(j.name, j.rate, j.hours));
       } else {
-        // Migrar datos viejos
-        if(d.n1 !== undefined) addJob(d.n1, d.r1, d.h1);
-        else addJob('Main job', 25, 40);
-        
-        if(d.n2 !== undefined) addJob(d.n2, d.r2, d.h2);
-        else addJob('Side job', 18, 15);
+        if(d.n1 !== undefined) addJob(d.n1, d.r1, d.h1); else addJob('Main job', 25, 40);
+        if(d.n2 !== undefined) addJob(d.n2, d.r2, d.h2); else addJob('Side job', 18, 15);
       }
 
+      // Metas
+      document.getElementById('goals-list').innerHTML = '';
+      if (d.goals && d.goals.length > 0) {
+        d.goals.forEach(g => addGoal(g.name, g.amount));
+      } else if (d.sg !== undefined) {
+        // Migración de la antigua meta única
+        addGoal('Mi Meta', d.sg);
+      } else {
+        addGoal('Universidad', 5000);
+      }
+
+      // Globales
       document.getElementById('extra').value = d.ex || 0;
       document.getElementById('taxRate').value = d.tx || 12;
-      document.getElementById('savingsGoal').value = d.sg || 5000;
       
+      // Fechas
       if (d.startD && d.endD) {
         document.getElementById('start-date').value = d.startD;
         document.getElementById('end-date').value = d.endD;
@@ -624,6 +672,7 @@
         setInitialDates();
       }
       
+      // Gastos
       document.getElementById('expenses-list').innerHTML = '';
       if (d.expenses && d.expenses.length > 0) {
         d.expenses.forEach(e => addExpense(e.name, e.amount));
@@ -636,6 +685,8 @@
       setInitialDates();
       addJob('Main job', 25, 40);
       addJob('Side job', 18, 15);
+      addGoal('Universidad', 5000);
+      addGoal('Viaje', 1500);
       addDefaultExpenses();
       saveAndCalc();
     }
@@ -648,20 +699,18 @@
   function calc(d) {
     let wGrossJobs = 0;
     
-    // Calcular subtotales de trabajos dinámicos
-    d.jobs.forEach(j => {
+    // Subtotales trabajos
+    (d.jobs || []).forEach(j => {
       const rate = parseFloat(j.rate) || 0;
       const hours = parseFloat(j.hours) || 0;
       const sub = rate * hours;
       wGrossJobs += sub;
-      
       const subEl = document.getElementById(`sub-job-${j.id}`);
       if(subEl) subEl.textContent = fmt(sub);
     });
 
     const extra = parseFloat(d.ex) || 0;
     const taxRate = (parseFloat(d.tx) || 0) / 100;
-    const goal = parseFloat(d.sg) || 1; 
     
     let wExp = 0;
     document.querySelectorAll('.exp-amt').forEach(el => wExp += parseFloat(el.value) || 0);
@@ -674,7 +723,7 @@
     const mExpTaxes = (wExp + wTaxes) * WEEKS_PER_MONTH;
     const mNet = wNet * WEEKS_PER_MONTH;
     
-    const weeks = parseInt(d.wk);
+    const weeks = parseInt(d.wk) || 14;
 
     document.getElementById('m-gross').textContent = fmt(wGross);
     document.getElementById('m-tax').textContent = fmt(wTaxes);
@@ -698,21 +747,54 @@
     const pfEl = document.getElementById('p-final');
     pfEl.textContent = fmt(finalNet); setClass(pfEl, finalNet);
 
-    // Barra de progreso
-    let progressPct = (finalNet / goal) * 100;
-    if (progressPct < 0) progressPct = 0;
-    
-    const goalBar = document.getElementById('goal-bar');
-    const goalText = document.getElementById('goal-pct');
-    
-    goalText.textContent = progressPct.toFixed(1) + '%';
-    goalBar.style.width = Math.min(progressPct, 100) + '%';
-    
-    if(progressPct >= 100) {
-      goalBar.style.backgroundColor = '#fbbf24'; 
-      goalText.innerHTML = '¡Logrado! ✨';
+    /* ----------- RENDERIZADO DE METAS DE AHORRO MÚLTIPLES ----------- */
+    const goalsContainer = document.getElementById('goals-progress-list');
+    goalsContainer.innerHTML = ''; // Limpiar contenedor
+
+    if (d.goals && d.goals.length > 0) {
+      d.goals.forEach((g) => {
+        const goalAmount = parseFloat(g.amount) || 1;
+        let progressPct = (finalNet / goalAmount) * 100;
+        if (progressPct < 0) progressPct = 0;
+
+        // Calcular semanas necesarias
+        let weekText = "";
+        if (wNet > 0) {
+          const weeksNeeded = Math.ceil(goalAmount / wNet);
+          if (weeksNeeded <= weeks) {
+            weekText = `✅ ¡Alcanzada en la Semana ${weeksNeeded}!`;
+          } else {
+            const extraWeeks = weeksNeeded - weeks;
+            weekText = `⏳ Faltan ${extraWeeks} sem. extra`;
+          }
+        } else {
+          weekText = "❌ Ahorro semanal insuficiente";
+        }
+
+        const isReached = progressPct >= 100;
+        const color = isReached ? '#fbbf24' : '#10b981';
+        const displayPct = progressPct > 100 ? 100 : progressPct.toFixed(1);
+        const finalPctText = isReached ? '¡Logrado! ✨' : `${displayPct}%`;
+
+        // Generar HTML para cada meta
+        const goalHtml = `
+          <div class="goal-item">
+            <div class="goal-labels">
+              <span class="goal-name">${g.name || 'Sin Nombre'}</span>
+              <div class="goal-info">
+                <span class="goal-pct">${finalPctText}</span>
+                <span class="goal-week">${weekText}</span>
+              </div>
+            </div>
+            <div class="goal-track">
+              <div class="goal-fill" style="width: ${Math.min(progressPct, 100)}%; background-color: ${color};"></div>
+            </div>
+          </div>
+        `;
+        goalsContainer.innerHTML += goalHtml;
+      });
     } else {
-      goalBar.style.backgroundColor = '#10b981';
+      goalsContainer.innerHTML = `<span style="font-size:12px;color:rgba(255,255,255,0.7)">No hay metas configuradas.</span>`;
     }
 
     /* ----------- GRÁFICOS ----------- */
@@ -720,71 +802,74 @@
     const gridColor = isDark ? '#334155' : '#f1f5f9';
     const textColor = isDark ? '#94a3b8' : '#64748b';
 
-    // Gráfico de Línea
     const labels = Array.from({ length: weeks }, (_, i) => 'Sem ' + (i + 1));
     const cumGross = labels.map((_, i) => parseFloat((wGross * (i + 1)).toFixed(2)));
     const cumExp   = labels.map((_, i) => parseFloat(((wExp + wTaxes) * (i + 1)).toFixed(2)));
     const cumNet   = labels.map((_, i) => parseFloat((wNet * (i + 1)).toFixed(2)));
 
     if (projChart) projChart.destroy();
-    projChart = new Chart(document.getElementById('projChart'), {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [
-          { label: 'Bruto Acumulado', data: cumGross, borderColor: '#0ea5e9', backgroundColor: 'rgba(14,165,233,0.1)', borderWidth: 2, fill: true, tension: 0.3 },
-          { label: 'Gastos + Tax', data: cumExp, borderColor: '#ef4444', borderWidth: 2, borderDash: [5, 5], fill: false, tension: 0.3 },
-          { label: 'Ahorro Neto', data: cumNet, borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.2)', borderWidth: 3, fill: true, tension: 0.3 },
-        ]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        interaction: { mode: 'index', intersect: false },
-        plugins: { 
-          tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmt(c.parsed.y) } },
-          legend: { labels: { color: textColor } }
-        },
-        scales: {
-          x: { grid: { display: false }, ticks: { color: textColor, maxRotation: 45, minRotation: 0 } },
-          y: { grid: { color: gridColor }, ticks: { color: textColor, callback: v => '$' + v } }
-        }
-      }
-    });
-
-    // Gráfico de Pastel (Distribución Final)
-    if (distChart) distChart.destroy();
-    // Evitar valores negativos en el pie chart si los gastos superan los ingresos
-    const displayNet = finalNet > 0 ? finalNet : 0; 
-    distChart = new Chart(document.getElementById('distChart'), {
-      type: 'doughnut',
-      data: {
-        labels: ['Impuestos', 'Gastos', 'Ahorro Neto'],
-        datasets: [{
-          data: [totalTaxes, totalExpenses, displayNet],
-          backgroundColor: ['#f59e0b', '#ef4444', '#10b981'],
-          borderWidth: 0,
-          hoverOffset: 4
-        }]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: {
-          legend: { position: 'bottom', labels: { color: textColor, padding: 20 } },
-          tooltip: {
-            callbacks: {
-              label: c => {
-                const total = c.dataset.data.reduce((a,b)=>a+b,0);
-                const val = c.parsed;
-                const pct = total > 0 ? ((val/total)*100).toFixed(1) : 0;
-                return ` ${c.label}: ${fmt(val)} (${pct}%)`;
-              }
-            }
+    const projCanvas = document.getElementById('projChart');
+    if (projCanvas) {
+        projChart = new Chart(projCanvas, {
+          type: 'line',
+          data: {
+            labels,
+            datasets: [
+              { label: 'Bruto Acumulado', data: cumGross, borderColor: '#0ea5e9', backgroundColor: 'rgba(14,165,233,0.1)', borderWidth: 2, fill: true, tension: 0.3 },
+              { label: 'Gastos + Tax', data: cumExp, borderColor: '#ef4444', borderWidth: 2, borderDash: [5, 5], fill: false, tension: 0.3 },
+              { label: 'Ahorro Neto', data: cumNet, borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.2)', borderWidth: 3, fill: true, tension: 0.3 },
+            ]
           },
-          title: { display: true, text: 'Distribución Total', color: textColor, font: { size: 14 } }
-        },
-        cutout: '65%'
-      }
-    });
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: { 
+              tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmt(c.parsed.y) } },
+              legend: { labels: { color: textColor } }
+            },
+            scales: {
+              x: { grid: { display: false }, ticks: { color: textColor, maxRotation: 45, minRotation: 0 } },
+              y: { grid: { color: gridColor }, ticks: { color: textColor, callback: v => '$' + v } }
+            }
+          }
+        });
+    }
+
+    if (distChart) distChart.destroy();
+    const displayNet = finalNet > 0 ? finalNet : 0; 
+    const distCanvas = document.getElementById('distChart');
+    if (distCanvas) {
+        distChart = new Chart(distCanvas, {
+          type: 'doughnut',
+          data: {
+            labels: ['Impuestos', 'Gastos', 'Ahorro Neto'],
+            datasets: [{
+              data: [totalTaxes, totalExpenses, displayNet],
+              backgroundColor: ['#f59e0b', '#ef4444', '#10b981'],
+              borderWidth: 0,
+              hoverOffset: 4
+            }]
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+              legend: { position: 'bottom', labels: { color: textColor, padding: 20 } },
+              tooltip: {
+                callbacks: {
+                  label: c => {
+                    const total = c.dataset.data.reduce((a,b)=>a+b,0);
+                    const val = c.parsed;
+                    const pct = total > 0 ? ((val/total)*100).toFixed(1) : 0;
+                    return ` ${c.label}: ${fmt(val)} (${pct}%)`;
+                  }
+                }
+              },
+              title: { display: true, text: 'Distribución Total', color: textColor, font: { size: 14 } }
+            },
+            cutout: '65%'
+          }
+        });
+    }
   }
 
   window.onload = loadData;
