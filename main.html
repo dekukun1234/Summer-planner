@@ -173,10 +173,16 @@
     .chart-wrap { position: relative; width: 100%; height: 280px; margin-top: 15px; }
     
     .slider-row { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; background: var(--color-bg-sec); padding: 15px; border-radius: var(--radius-md); border: 1px solid var(--color-border); }
-    .slider-row label { font-size: 14px; font-weight: 600; color: var(--color-text-main); }
-    .slider-row input[type=range] { flex: 1; accent-color: var(--color-primary); }
-    .slider-val { font-size: 16px; font-weight: 700; color: var(--color-primary); background: var(--color-bg-card); padding: 4px 12px; border-radius: 20px; border: 1px solid var(--color-border); }
+    .slider-row label { font-size: 14px; font-weight: 600; color: var(--color-text-main); white-space: nowrap; }
+    .slider-val { font-size: 16px; font-weight: 700; color: var(--color-primary); background: var(--color-bg-card); padding: 4px 12px; border-radius: 20px; border: 1px solid var(--color-border); white-space: nowrap; }
     
+    /* Nuevos Estilos para los Inputs de Fecha */
+    .date-inputs { display: flex; align-items: center; gap: 10px; flex: 1; justify-content: center; }
+    .date-inputs input[type="date"] { padding: 8px 12px; border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: 14px; outline: none; background: var(--color-bg-card); color: var(--color-text-main); font-family: inherit; transition: border-color 0.2s; color-scheme: light dark; }
+    .date-inputs input[type="date"]:focus { border-color: var(--color-primary); }
+    .date-inputs span { color: var(--color-text-muted); font-size: 14px; font-weight: 500; }
+    body.dark-theme .date-inputs input[type="date"] { color-scheme: dark; }
+
     .footer-credits { text-align: center; margin-top: 40px; font-size: 13px; color: var(--color-text-muted); }
     .footer-credits strong { color: var(--color-text-main); }
 
@@ -184,6 +190,9 @@
       .exp-row { flex-direction: column; }
       .exp-row input[type="text"], .exp-row .pfx { width: 100%; box-sizing: border-box; }
       .del-btn { width: 100%; }
+      .date-inputs { flex-direction: column; align-items: stretch; gap: 8px; }
+      .slider-row { flex-direction: column; align-items: stretch; gap: 12px; }
+      .slider-val { align-self: flex-start; }
     }
   </style>
 </head>
@@ -263,8 +272,12 @@
   <p class="slabel">Proyección Acumulada</p>
 
   <div class="slider-row">
-    <label>Duración del Summer (Semanas)</label>
-    <input type="range" id="weeks-slider" min="1" max="20" value="14" step="1" oninput="updateSlider()">
+    <label>Fechas del Summer</label>
+    <div class="date-inputs">
+      <input type="date" id="start-date" onchange="saveAndCalc()">
+      <span> a </span>
+      <input type="date" id="end-date" onchange="saveAndCalc()">
+    </div>
     <span class="slider-val"><span id="weeks-val">14</span> sem</span>
   </div>
 
@@ -349,11 +362,6 @@
     return exps;
   }
 
-  function updateSlider() {
-    document.getElementById('weeks-val').textContent = document.getElementById('weeks-slider').value;
-    saveAndCalc();
-  }
-
   function setClass(el, val) { el.classList.remove('pos', 'neg'); if (val !== 0) el.classList.add(val > 0 ? 'pos' : 'neg'); }
 
   function clearData() {
@@ -363,7 +371,41 @@
     }
   }
 
+  // Utilidad para obtener la fecha local en formato YYYY-MM-DD
+  function toLocalISODate(date) {
+    const tzOffset = date.getTimezoneOffset() * 60000;
+    return new Date(date.getTime() - tzOffset).toISOString().split('T')[0];
+  }
+
+  function setInitialDates() {
+    const start = new Date();
+    const end = new Date();
+    end.setDate(end.getDate() + (14 * 7)); // Por defecto 14 semanas
+    
+    document.getElementById('start-date').value = toLocalISODate(start);
+    document.getElementById('end-date').value = toLocalISODate(end);
+  }
+
   function saveAndCalc() {
+    const sDateStr = document.getElementById('start-date').value;
+    const eDateStr = document.getElementById('end-date').value;
+    let weeks = 14;
+
+    // Calcular las semanas basado en las fechas
+    if(sDateStr && eDateStr) {
+      const d1 = new Date(sDateStr);
+      const d2 = new Date(eDateStr);
+      if (d2 > d1) {
+        const diffTime = Math.abs(d2 - d1);
+        weeks = Math.max(1, Math.round(diffTime / (1000 * 60 * 60 * 24 * 7)));
+      } else {
+        weeks = 1; // Mínimo 1 semana si el rango es inválido
+      }
+    }
+    
+    // Actualizar el texto en la UI
+    document.getElementById('weeks-val').textContent = weeks;
+
     const data = {
       n1: document.getElementById('job1-name').value,
       r1: document.getElementById('rate1').value,
@@ -373,7 +415,9 @@
       h2: document.getElementById('hours2').value,
       ex: document.getElementById('extra').value,
       tx: document.getElementById('taxRate').value,
-      wk: document.getElementById('weeks-slider').value,
+      startD: sDateStr,
+      endD: eDateStr,
+      wk: weeks,
       expenses: getExpensesData()
     };
     localStorage.setItem('summerWorkData', JSON.stringify(data));
@@ -393,8 +437,14 @@
       document.getElementById('hours2').value = d.h2 || 15;
       document.getElementById('extra').value = d.ex || 0;
       document.getElementById('taxRate').value = d.tx || 12;
-      document.getElementById('weeks-slider').value = d.wk || 14;
-      document.getElementById('weeks-val').textContent = d.wk || 14;
+      
+      // Restaurar o inicializar fechas
+      if (d.startD && d.endD) {
+        document.getElementById('start-date').value = d.startD;
+        document.getElementById('end-date').value = d.endD;
+      } else {
+        setInitialDates();
+      }
       
       document.getElementById('expenses-list').innerHTML = '';
       if (d.expenses && d.expenses.length > 0) {
@@ -402,8 +452,11 @@
       } else {
         addDefaultExpenses();
       }
-      calc(d);
+      
+      // Se llama saveAndCalc para procesar las fechas y renderizar
+      saveAndCalc();
     } else {
+      setInitialDates();
       addDefaultExpenses();
       saveAndCalc();
     }
